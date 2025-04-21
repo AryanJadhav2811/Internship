@@ -14,6 +14,13 @@ exports.addNewBooking = async (req, res) => {
       });
     }
 
+    if (user.role === "admin") {
+      return res.status(401).json({
+        success: false,
+        message: "Admins cannot book a place.",
+      });
+    }
+
     const { id } = req.params;
     const place = await Place.findById(id);
     if (!place) {
@@ -93,6 +100,37 @@ exports.getBooking = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: booking,
+      message: "Booking data fetched.",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+exports.getBookingsForAdmin = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        mesasge: "No User found. Login Again.",
+      });
+    }
+
+    var bookings = [];
+
+    if (user.role === "admin") {
+      bookings = await Booking.find({}).populate("owner").populate("placeId");
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: bookings,
       message: "Booking data fetched.",
     });
   } catch (err) {

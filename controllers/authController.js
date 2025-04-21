@@ -6,6 +6,7 @@ dotenv.config();
 
 exports.register = async (req, res) => {
   try {
+
     //fetch user details
     const { name, email, password, gender, phone, role } = req.body;
 
@@ -66,11 +67,13 @@ exports.register = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
     });
+
     console.log(newUser);
     return res.status(201).json({
       success: true,
       message: "User is successfully registered.",
     });
+
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -81,6 +84,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
   try {
+
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({
@@ -88,7 +92,9 @@ exports.login = async (req, res) => {
         message: "Please fill in all the required details.",
       });
     }
+
     const existingUser = await User.findOne({ email });
+
     if (!existingUser) {
       return res.status(400).json({
         success: false,
@@ -116,10 +122,12 @@ exports.login = async (req, res) => {
     });
 
     console.log(existingUser);
+
     return res.status(200).json({
       success: true,
       message: "User is successfully logged in.",
     });
+
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -130,11 +138,14 @@ exports.login = async (req, res) => {
 
 exports.logout = async (req, res) => {
   try {
+
     res.clearCookie("token");
+
     return res.status(200).json({
       success: true,
       message: "User is successfully logged out.",
     });
+    
   } catch (err) {
     res.status(500).json({
       success: false,

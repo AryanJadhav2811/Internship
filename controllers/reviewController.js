@@ -4,8 +4,11 @@ const Review = require("../models/reviewModel");
 
 exports.createReview = async (req, res) => {
   try {
+
     const userId = req.user._id;
+
     const user = await User.findById(userId);
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -14,7 +17,8 @@ exports.createReview = async (req, res) => {
     }
 
     if (user.role === "admin") {
-      return res.status(400).json({
+
+      return res.status(401).json({
         success: false,
         message: "Admins cannot review places.",
       });
@@ -25,13 +29,17 @@ exports.createReview = async (req, res) => {
     const place = await Place.findById(id);
 
     if (!place) {
+
       return res.status(404).json({
+
         success: false,
         message: "Place not found.",
+
       });
     }
 
     const { body, rating } = req.body;
+
     if (!body || !rating) {
       return res.status(400).json({
         success: false,
@@ -51,6 +59,7 @@ exports.createReview = async (req, res) => {
       data: addReview,
       message: "New Review created!",
     });
+
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -71,7 +80,9 @@ exports.getReviews = async (req, res) => {
     }
 
     const { id } = req.params;
+
     const place = await Place.findById(id);
+
     if (!place) {
       return res.status(404).json({
         success: false,
@@ -88,6 +99,7 @@ exports.getReviews = async (req, res) => {
       data: review,
       messsage: "Review data fetched",
     });
+    
   } catch (err) {
     res.status(500).json({
       success: false,

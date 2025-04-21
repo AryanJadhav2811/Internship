@@ -3,8 +3,11 @@ const User = require("../models/userModel");
 
 exports.addNewPlace = async (req, res) => {
   try {
+
     const userId = req.user._id;
+
     const user = await User.findById(userId);
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -83,6 +86,7 @@ exports.addNewPlace = async (req, res) => {
       data: place,
       message: "New Place added!",
     });
+
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -93,8 +97,11 @@ exports.addNewPlace = async (req, res) => {
 
 exports.getPlaces = async (req, res) => {
   try {
+
     const userId = req.user._id;
+
     const user = await User.findById(userId);
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -119,7 +126,9 @@ exports.getPlaces = async (req, res) => {
 
 exports.viewPlace = async (req, res) => {
   try {
+
     const userId = req.user._id;
+
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
@@ -186,7 +195,6 @@ exports.filterPlaces = async (req, res) => {
     });
   }
 };
-
 
 exports.updatePlace = async (req, res) => {
   try {
@@ -256,6 +264,7 @@ exports.updatePlace = async (req, res) => {
 
 exports.deletePlace = async (req, res) => {
   try {
+
     const userId = req.user._id;
     const user = await User.findById(userId);
     if (!user) {
